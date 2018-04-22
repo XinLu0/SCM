@@ -14,7 +14,7 @@ $end_year=2030;  // Ending year for dropdown list box
 <!doctype html public "-//w3c//dtd html 3.2//en">
 <html>
 <head>
-<script langauge="javascript">
+<script>
 function post_value(mm,dt,yy){
 opener.document.f1.p_name.value = mm + "/" + dt + "/" + yy;
 /// cheange the above line for different date format
@@ -26,6 +26,27 @@ function reload(form){
 var month_val=document.getElementById('month').value; // collect month value
 var year_val=document.getElementById('year').value;      // collect year value
 self.location='#?month=' + month_val + '&year=' + year_val ; // reload the page
+}
+function post_to_url(path, params) {
+    method = "post";
+
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+         }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
 }
 </script>
 <style type="text/css">
@@ -114,7 +135,8 @@ echo "<tr><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</t
 //////// Starting of the days//////////
 for($i=1;$i<=$no_of_days;$i++){
 $pv="'$month'".","."'$i'".","."'$year'";
-echo $adj."<td><a href='#' onclick=\"post_value($pv);\">$i</a>"; // This will display the date inside the calendar cell
+$path = '\'https://scm-sg.com/class-details/\'';
+echo $adj."<td><a href=\"javascript:void(0);\" onclick=\"post_to_url($path,{month: $month, d: $i});\">$i</a>"; // This will display the date inside the calendar cell
 echo " </td>";
 $adj='';
 $j ++;
